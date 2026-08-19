@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Blue Letter – Subscribe</title>
+  <style>
+    :root {
+      --brand-blue: #1666fc;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0ebe3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .card {
+      width: 320px;
+      padding: 30px;
+      background: #fff;
+      border: 8px solid #000;
+      box-shadow: 15px 15px 0 #000;
+      transform: rotate(-2deg);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: rotate(0deg) scale(1.02);
+      box-shadow: 20px 20px 0 #000;
+    }
+
+    .banner {
+      position: absolute;
+      top: 3px;
+      right: -95px;
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 15px;
+      width: 350px;
+      text-align: center;
+      transform: rotate(45deg);
+      font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 2px;
+      overflow: hidden;
+      transition: background 0.5s ease;
+    }
+    .banner:hover {
+      background: #0f56d4;
+    }
+    .banner-text {
+      display: inline-block;
+      width: 100%;
+      position: absolute;
+      left: 13%;
+      top: 50%;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .banner-text:first-child {
+      transform: translateY(-50%);
+    }
+    .banner-text:last-child {
+      opacity: 0;
+      transform: translateY(60%);
+    }
+    .banner:hover .banner-text:first-child {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    .banner:hover .banner-text:last-child {
+      opacity: 1;
+      transform: translateY(-40%);
+    }
+
+    .card__title {
+      display: block;
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      border-bottom: 4px solid var(--brand-blue);
+      width: 75%;
+    }
+
+    .card__subtitle {
+      font-size: 16px;
+      line-height: 1.4;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+
+    .card__form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card__form input {
+      padding: 12px;
+      border: 4px solid #000;
+      font-size: 16px;
+      font-family: inherit;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+    .card__form input:focus {
+      outline: none;
+      transform: scale(1.05);
+      border-color: var(--brand-blue);
+    }
+
+    .sign-up {
+      border: 4px solid #000;
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .sign-up:hover {
+      background: #fff;
+      color: var(--brand-blue);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 0 #000;
+    }
+    .sign-up:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .card__error {
+      display: none;
+      color: #c62828;
+      font-size: 13px;
+      font-weight: 700;
+      margin: -10px 0 0;
+    }
+
+    .card__success {
+      display: none;
+    }
+    .card.is-success .card__form,
+    .card.is-success .card__error,
+    .card.is-success .banner {
+      display: none;
+    }
+    .card.is-success .card__success {
+      display: block;
+    }
+    .card__success-title {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 8px;
+      border-bottom: 4px solid var(--brand-blue);
+      width: 90%;
+    }
+    .card__success-text {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="banner">
+      <span class="banner-text">SUBSCRIBE</span>
+      <span class="banner-text">SATURDAYS</span>
+    </div>
+    <span class="card__title">The Blue Letter</span>
+    <p class="card__subtitle">A weekly letter on family money, read aloud. Every Saturday.</p>
+    <form class="card__form" novalidate>
+      <input placeholder="Your Email" type="email" name="fields[email]" required autocomplete="email" />
+      <button class="sign-up" type="submit">Sign up</button>
+    </form>
+    <p class="card__error">Something went wrong. Try again.</p>
+    <div class="card__success">
+      <span class="card__success-title">You're in.</span>
+      <p class="card__success-text">Your first Blue Letter lands this Saturday. Check your inbox for the welcome email.</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.querySelector('.card__form');
+      var card = document.querySelector('.card');
+      var error = document.querySelector('.card__error');
+      var button = form.querySelector('.sign-up');
+      var endpoint = 'https://assets.mailerlite.com/jsonp/2360769/forms/196159645727852227/subscribe';
+
+      function handleResponse(res) {
+        delete window._mlCb;
+        delete window.ml_webform_success_44961452;
+        button.disabled = false;
+        if (res && res.success) {
+          card.classList.add('is-success');
+        } else {
+          error.style.display = 'block';
+        }
+      }
+      window._mlCb = handleResponse;
+      window.ml_webform_success_44961452 = handleResponse;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        error.style.display = 'none';
+        var email = form.querySelector('input[name="fields[email]"]').value;
+        if (!email) return;
+        button.disabled = true;
+        var params = new URLSearchParams({
+          'fields[email]': email,
+          'ml-submit': '1',
+          'anticsrf': 'true',
+          'callback': '_mlCb'
+        });
+        var script = document.createElement('script');
+        script.src = endpoint + '?' + params.toString();
+        script.onerror = function () {
+          button.disabled = false;
+          error.style.display = 'block';
+        };
+        document.body.appendChild(script);
+      });
+    })();
+  </script>
+</body>
+</html>
