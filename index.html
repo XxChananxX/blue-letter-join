@@ -82,16 +82,15 @@
       font-weight: 700;
       font-size: 34px;
       color: var(--brand-dark);
-      margin: 0 0 4px;
+      margin: 0;
       letter-spacing: -0.01em;
       line-height: 1.1;
-    }
-
-    .title-under {
-      display: block;
-      width: 160px;
-      height: 10px;
-      margin: 6px 0 18px;
+      display: inline-block;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3' stroke='%23005FEB' stroke-width='2.5' stroke-linecap='round' fill='none' opacity='0.9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      background-size: 100% 0.4em;
+      padding-bottom: 0.15em;
     }
 
     .subtitle {
@@ -186,14 +185,13 @@
       font-weight: 700;
       font-size: 28px;
       color: var(--brand-dark);
-      margin: 0 0 4px;
-    }
-
-    .success-title-under {
-      display: block;
-      width: 120px;
-      height: 10px;
-      margin: 6px auto 16px;
+      margin: 0;
+      display: inline-block;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3' stroke='%23005FEB' stroke-width='2.5' stroke-linecap='round' fill='none' opacity='0.9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      background-size: 100% 0.4em;
+      padding-bottom: 0.15em;
     }
 
     .success-text {
@@ -222,9 +220,6 @@
     <div class="card">
       <p class="kicker">A Weekly Letter on Family Money</p>
       <h1 class="title">The Blue Letter</h1>
-      <svg class="title-under" viewBox="0 0 200 8" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3" stroke="#005FEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
-      </svg>
       <p class="subtitle">Read aloud, every Saturday. Join thousands of Nigerian families who believe the future shouldn't wait.</p>
 
       <form class="card__form" novalidate>
@@ -242,9 +237,6 @@
 
       <div class="card__success">
         <p class="success-title">You're in.</p>
-        <svg class="success-title-under" viewBox="0 0 200 8" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3" stroke="#005FEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
-        </svg>
         <p class="success-text">Your first Blue Letter lands this Saturday. Check your inbox for the welcome email.</p>
       </div>
     </div>
