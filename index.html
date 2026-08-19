@@ -5,9 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Blue Letter – Subscribe</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500;1,6..96,700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Beth+Ellen&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root {
-      --brand-blue: #1666fc;
+      --brand-blue: #005feb;
+      --brand-blue-light: #3380ff;
+      --brand-dark: #0d1f3c;
+      --brand-cream: #faf7f2;
+      --brand-cream-dark: #f0ebe3;
+      --brand-ink: #1a1a2e;
+      --brand-ink-light: #4a4a6a;
+      --brand-green: #228153;
+      --brand-border: #e6dfd3;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -16,184 +34,222 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f0ebe3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--brand-cream);
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(13, 31, 60, 0.025) 0px, transparent 1px),
+        radial-gradient(circle at 70% 70%, rgba(13, 31, 60, 0.025) 0px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(13, 31, 60, 0.02) 0px, transparent 1px);
+      background-size: 24px 24px, 31px 31px, 19px 19px;
+      font-family: "Nunito", system-ui, sans-serif;
+      color: var(--brand-ink);
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 440px;
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+    .env-icon {
+      width: 56px;
+      height: auto;
+      margin-bottom: 28px;
     }
 
     .card {
-      width: 320px;
-      padding: 30px;
-      background: #fff;
-      border: 8px solid #000;
-      box-shadow: 15px 15px 0 #000;
-      transform: rotate(-2deg);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .card:hover {
-      transform: rotate(0deg) scale(1.02);
-      box-shadow: 20px 20px 0 #000;
+      background: #ffffff;
+      border: 1px solid var(--brand-border);
+      border-radius: 16px;
+      padding: 40px 36px 44px;
+      box-shadow: 0 12px 40px -18px rgba(13, 31, 60, 0.25);
+      text-align: left;
     }
 
-    .banner {
-      position: absolute;
-      top: 3px;
-      right: -95px;
-      background: var(--brand-blue);
-      color: #fff;
-      padding: 15px;
-      width: 350px;
-      text-align: center;
-      transform: rotate(45deg);
-      font-weight: bold;
-      font-size: 18px;
-      letter-spacing: 2px;
-      overflow: hidden;
-      transition: background 0.5s ease;
-    }
-    .banner:hover {
-      background: #0f56d4;
-    }
-    .banner-text {
-      display: inline-block;
-      width: 100%;
-      position: absolute;
-      left: 13%;
-      top: 50%;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .banner-text:first-child {
-      transform: translateY(-50%);
-    }
-    .banner-text:last-child {
-      opacity: 0;
-      transform: translateY(60%);
-    }
-    .banner:hover .banner-text:first-child {
-      opacity: 0;
-      transform: translateY(-100%);
-    }
-    .banner:hover .banner-text:last-child {
-      opacity: 1;
-      transform: translateY(-40%);
-    }
-
-    .card__title {
-      display: block;
-      font-size: 24px;
-      font-weight: 700;
-      color: #000;
+    .kicker {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      margin-bottom: 10px;
-      border-bottom: 4px solid var(--brand-blue);
-      width: 75%;
+      letter-spacing: 0.25em;
+      color: var(--brand-ink-light);
+      margin: 0 0 12px;
     }
 
-    .card__subtitle {
-      font-size: 16px;
-      line-height: 1.4;
-      color: #333;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
+    .title {
+      font-family: "Bodoni Moda", Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 34px;
+      color: var(--brand-dark);
+      margin: 0 0 4px;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .title-under {
+      display: block;
+      width: 160px;
+      height: 10px;
+      margin: 6px 0 18px;
+    }
+
+    .subtitle {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--brand-ink-light);
+      margin: 0 0 28px;
     }
 
     .card__form {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
+
     .card__form input {
-      padding: 12px;
-      border: 4px solid #000;
-      font-size: 16px;
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      font-size: 15px;
       font-family: inherit;
-      background-color: #fff;
-      transition: all 0.3s ease;
+      background: #fff;
+      color: var(--brand-ink);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card__form input::placeholder {
+      color: #9a9aa8;
     }
     .card__form input:focus {
       outline: none;
-      transform: scale(1.05);
       border-color: var(--brand-blue);
+      box-shadow: 0 0 0 3px rgba(0, 95, 235, 0.15);
     }
 
     .sign-up {
-      border: 4px solid #000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
       background: var(--brand-blue);
       color: #fff;
-      padding: 12px;
-      font-size: 18px;
-      font-weight: bold;
-      text-transform: uppercase;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 24px -6px rgba(0, 95, 235, 0.5);
     }
     .sign-up:hover {
-      background: #fff;
-      color: var(--brand-blue);
-      transform: translateY(-5px);
-      box-shadow: 0 5px 0 #000;
+      background: var(--brand-blue-light);
+      transform: translateY(-1px);
     }
     .sign-up:disabled {
       opacity: 0.6;
       cursor: wait;
       transform: none;
-      box-shadow: none;
+    }
+
+    .sign-up svg {
+      width: 26px;
+      height: auto;
     }
 
     .card__error {
       display: none;
-      color: #c62828;
+      color: #e74c3c;
       font-size: 13px;
       font-weight: 700;
-      margin: -10px 0 0;
+      margin: 0;
     }
 
     .card__success {
       display: none;
+      text-align: center;
+      padding: 8px 0;
     }
     .card.is-success .card__form,
-    .card.is-success .card__error,
-    .card.is-success .banner {
+    .card.is-success .card__error {
       display: none;
     }
     .card.is-success .card__success {
       display: block;
     }
-    .card__success-title {
-      display: block;
-      font-size: 22px;
+
+    .success-title {
+      font-family: "Bodoni Moda", Georgia, serif;
+      font-style: italic;
       font-weight: 700;
-      text-transform: uppercase;
-      color: #000;
-      margin-bottom: 8px;
-      border-bottom: 4px solid var(--brand-blue);
-      width: 90%;
+      font-size: 28px;
+      color: var(--brand-dark);
+      margin: 0 0 4px;
     }
-    .card__success-text {
+
+    .success-title-under {
+      display: block;
+      width: 120px;
+      height: 10px;
+      margin: 6px auto 16px;
+    }
+
+    .success-text {
       font-size: 15px;
-      line-height: 1.5;
-      color: #333;
+      line-height: 1.6;
+      color: var(--brand-ink-light);
+      margin: 0;
+    }
+
+    .fine-print {
+      margin-top: 24px;
+      font-family: "Beth Ellen", cursive;
+      font-size: 17px;
+      color: var(--brand-ink-light);
+      opacity: 0.85;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="banner">
-      <span class="banner-text">SUBSCRIBE</span>
-      <span class="banner-text">SATURDAYS</span>
+  <div class="wrap">
+    <svg class="env-icon" viewBox="0 0 64 48" aria-hidden="true">
+      <rect x="4" y="4" width="56" height="40" rx="6" fill="#005FEB"/>
+      <path d="M6 8 L32 28 L58 8" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+
+    <div class="card">
+      <p class="kicker">A Weekly Letter on Family Money</p>
+      <h1 class="title">The Blue Letter</h1>
+      <svg class="title-under" viewBox="0 0 200 8" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3" stroke="#005FEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+      </svg>
+      <p class="subtitle">Read aloud, every Saturday. Join thousands of Nigerian families who believe the future shouldn't wait.</p>
+
+      <form class="card__form" novalidate>
+        <input placeholder="Your email" type="email" name="fields[email]" required autocomplete="email" />
+        <button class="sign-up" type="submit">
+          Subscribe
+          <svg viewBox="0 0 60 24" aria-hidden="true">
+            <path d="M3 12 C 15 11, 28 13, 45 12" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M38 5 C 42 8, 46 10, 50 12 C 46 14, 42 16, 38 19" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </button>
+      </form>
+
+      <p class="card__error">Something went wrong. Try again.</p>
+
+      <div class="card__success">
+        <p class="success-title">You're in.</p>
+        <svg class="success-title-under" viewBox="0 0 200 8" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M2 5 C 30 2, 70 7, 110 4 S 180 6, 198 3" stroke="#005FEB" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+        </svg>
+        <p class="success-text">Your first Blue Letter lands this Saturday. Check your inbox for the welcome email.</p>
+      </div>
     </div>
-    <span class="card__title">The Blue Letter</span>
-    <p class="card__subtitle">A weekly letter on family money, read aloud. Every Saturday.</p>
-    <form class="card__form" novalidate>
-      <input placeholder="Your Email" type="email" name="fields[email]" required autocomplete="email" />
-      <button class="sign-up" type="submit">Sign up</button>
-    </form>
-    <p class="card__error">Something went wrong. Try again.</p>
-    <div class="card__success">
-      <span class="card__success-title">You're in.</span>
-      <p class="card__success-text">Your first Blue Letter lands this Saturday. Check your inbox for the welcome email.</p>
-    </div>
+
+    <p class="fine-print">every saturday, a little more clarity.</p>
   </div>
 
   <script>
