@@ -246,18 +246,13 @@
       var button = form.querySelector('.sign-up');
       var endpoint = 'https://assets.mailerlite.com/jsonp/2360769/forms/196159645727852227/subscribe';
 
-      function handleResponse(res) {
-        delete window._mlCb;
-        delete window.ml_webform_success_44961452;
-        button.disabled = false;
-        if (res && res.success) {
-          card.classList.add('is-success');
-        } else {
-          error.style.display = 'block';
-        }
+      function showSuccess() {
+        card.classList.add('is-success');
       }
-      window._mlCb = handleResponse;
-      window.ml_webform_success_44961452 = handleResponse;
+      function showError() {
+        button.disabled = false;
+        error.style.display = 'block';
+      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -265,19 +260,25 @@
         var email = form.querySelector('input[name="fields[email]"]').value;
         if (!email) return;
         button.disabled = true;
-        var params = new URLSearchParams({
+        var body = new URLSearchParams({
           'fields[email]': email,
           'ml-submit': '1',
-          'anticsrf': 'true',
-          'callback': '_mlCb'
+          'anticsrf': 'true'
         });
-        var script = document.createElement('script');
-        script.src = endpoint + '?' + params.toString();
-        script.onerror = function () {
-          button.disabled = false;
-          error.style.display = 'block';
-        };
-        document.body.appendChild(script);
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString()
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data && data.success) {
+              showSuccess();
+            } else {
+              showError();
+            }
+          })
+          .catch(showError);
       });
     })();
   </script>
