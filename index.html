@@ -267,9 +267,9 @@
         <button class="sign-up" type="submit">Join Free</button>
       </form>
 
-      <p class="card__error">Something went wrong. Try again.</p>
+      <p class="card__error" role="alert" aria-live="polite">Something went wrong. Try again.</p>
 
-      <div class="card__success">
+      <div class="card__success" aria-live="polite">
         <p class="success-title">You're in.</p>
         <p class="success-text">Your first Blue Letter lands this Saturday. Check your inbox for the welcome email.</p>
       </div>
@@ -291,42 +291,143 @@
       var form = document.querySelector('.card__form');
       var card = document.querySelector('.card');
       var error = document.querySelector('.card__error');
+      var input = form.querySelector('input[name="fields[email]"]');
       var button = form.querySelector('.sign-up');
       var endpoint = 'https://assets.mailerlite.com/jsonp/2360769/forms/196159645727852227/subscribe';
+      var defaultError = 'Something went wrong. Try again.';
+      var originalButtonText = button.textContent;
 
       function showSuccess() {
+        error.style.display = 'none';
+        error.textContent = defaultError;
+        button.disabled = false;
+        button.textContent = originalButtonText;
         card.classList.add('is-success');
       }
-      function showError() {
-        button.disabled = false;
+      function showError(msg) {
+        card.classList.remove('is-success');
+        error.textContent = msg || defaultError;
         error.style.display = 'block';
+        button.disabled = false;
+        button.textContent = originalButtonText;
       }
+      function parseResponseText(text) {
+        if (!text) return null;
+        try { return JSON.parse(text); } catch (e) {}
+        // JSONP wrapper like "callback({...})"
+        var m = text.match(/\{[\s\S]*\}/);
+        if (m) {
+          try { return JSON.parse(m[0]); } catch (e2) {}
+        }
+        if (/\"success\"\s*:\s*true/.test(text)) return { success: true };
+        return null;
+      }
+      function getFieldError(data) {
+        if (!data || !data.errors) return null;
+        var fields = data.errors.fields || data.errors;
+        if (fields.email && fields.email[0]) return fields.email[0];
+        if (typeof fields === 'object') {
+          for (var k in fields) {
+            var v = fields[k];
+            if (Array.isArray(v) && v[0]) return v[0];
+            if (typeof v === 'string') return v;
+          }
+        }
+        return null;
+      }
+      function submitWithJsonp(body) {
+        return new Promise(function (resolve, reject) {
+          var cb = '__ml_cb_' + Date.now();
+          var script = document.createElement('script');
+          var timer = setTimeout(function () {
+            cleanup();
+            reject(new Error('timeout'));
+          }, 8000);
+          function cleanup() {
+            clearTimeout(timer);
+            if (script.parentNode) script.parentNode.removeChild(script);
+            try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+          }
+          window[cb] = function (data) {
+            cleanup();
+            resolve(data);
+          };
+          script.onerror = function () {
+            cleanup();
+            reject(new Error('jsonp error'));
+          };
+          script.src = endpoint + '?' + body.toString() + '&callback=' + cb;
+          document.head.appendChild(script);
+        });
+      }
+
+      input.addEventListener('input', function () {
+        if (error.style.display === 'block') error.style.display = 'none';
+      });
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        // reset stale state
+        card.classList.remove('is-success');
         error.style.display = 'none';
-        var email = form.querySelector('input[name="fields[email]"]').value;
-        if (!email) return;
+        error.textContent = defaultError;
+
+        var email = (input.value || '').trim();
+        if (!email) {
+          showError('Please enter your email.');
+          input.focus();
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Enter a valid email address.');
+          input.focus();
+          return;
+        }
+
         button.disabled = true;
+        button.textContent = 'Joining…';
+
         var body = new URLSearchParams({
           'fields[email]': email,
           'ml-submit': '1',
           'anticsrf': 'true'
         });
+
         fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: body.toString()
         })
-          .then(function (res) { return res.json(); })
-          .then(function (data) {
+          .then(function (res) { return res.text().then(function (t) { return { ok: res.ok, text: t }; }); })
+          .then(function (r) {
+            var data = parseResponseText(r.text);
             if (data && data.success) {
               showSuccess();
+            } else if (data) {
+              var msg = getFieldError(data);
+              // Already subscribed is still success for UX
+              if (msg && /already/i.test(msg)) { showSuccess(); return; }
+              showError(msg || defaultError);
+            } else if (r.ok) {
+              // Empty but ok -> treat as success (idempotent)
+              showSuccess();
             } else {
-              showError();
+              throw new Error('bad response');
             }
           })
-          .catch(showError);
+          .catch(function () {
+            // CORS / network fallback via JSONP
+            submitWithJsonp(body)
+              .then(function (data) {
+                if (data && data.success) showSuccess();
+                else {
+                  var msg = getFieldError(data);
+                  if (msg && /already/i.test(msg)) { showSuccess(); return; }
+                  showError(msg || defaultError);
+                }
+              })
+              .catch(function () { showError(defaultError); });
+          });
       });
     })();
   </script>
